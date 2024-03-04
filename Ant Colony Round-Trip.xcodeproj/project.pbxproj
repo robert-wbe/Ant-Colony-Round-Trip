@@ -1,0 +1,586 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		10F5399B2B9661A20041B0E4 /* Ant_Colony_Round_TripApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F5399A2B9661A20041B0E4 /* Ant_Colony_Round_TripApp.swift */; };
+		10F5399D2B9661A20041B0E4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F5399C2B9661A20041B0E4 /* ContentView.swift */; };
+		10F5399F2B9661A30041B0E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 10F5399E2B9661A30041B0E4 /* Assets.xcassets */; };
+		10F539A22B9661A30041B0E4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 10F539A12B9661A30041B0E4 /* Preview Assets.xcassets */; };
+		10F539AD2B9661A30041B0E4 /* Ant_Colony_Round_TripTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F539AC2B9661A30041B0E4 /* Ant_Colony_Round_TripTests.swift */; };
+		10F539B72B9661A30041B0E4 /* Ant_Colony_Round_TripUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F539B62B9661A30041B0E4 /* Ant_Colony_Round_TripUITests.swift */; };
+		10F539B92B9661A30041B0E4 /* Ant_Colony_Round_TripUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F539B82B9661A30041B0E4 /* Ant_Colony_Round_TripUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		10F539A92B9661A30041B0E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 10F5398F2B9661A20041B0E4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 10F539962B9661A20041B0E4;
+			remoteInfo = "Ant Colony Round-Trip";
+		};
+		10F539B32B9661A30041B0E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 10F5398F2B9661A20041B0E4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 10F539962B9661A20041B0E4;
+			remoteInfo = "Ant Colony Round-Trip";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		10F539972B9661A20041B0E4 /* Ant Colony Round-Trip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ant Colony Round-Trip.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		10F5399A2B9661A20041B0E4 /* Ant_Colony_Round_TripApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ant_Colony_Round_TripApp.swift; sourceTree = "<group>"; };
+		10F5399C2B9661A20041B0E4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		10F5399E2B9661A30041B0E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		10F539A12B9661A30041B0E4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		10F539A32B9661A30041B0E4 /* Ant_Colony_Round_Trip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Ant_Colony_Round_Trip.entitlements; sourceTree = "<group>"; };
+		10F539A82B9661A30041B0E4 /* Ant Colony Round-TripTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Ant Colony Round-TripTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		10F539AC2B9661A30041B0E4 /* Ant_Colony_Round_TripTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ant_Colony_Round_TripTests.swift; sourceTree = "<group>"; };
+		10F539B22B9661A30041B0E4 /* Ant Colony Round-TripUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Ant Colony Round-TripUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		10F539B62B9661A30041B0E4 /* Ant_Colony_Round_TripUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ant_Colony_Round_TripUITests.swift; sourceTree = "<group>"; };
+		10F539B82B9661A30041B0E4 /* Ant_Colony_Round_TripUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ant_Colony_Round_TripUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		10F539942B9661A20041B0E4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		10F539A52B9661A30041B0E4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		10F539AF2B9661A30041B0E4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		10F5398E2B9661A20041B0E4 = {
+			isa = PBXGroup;
+			children = (
+				10F539992B9661A20041B0E4 /* Ant Colony Round-Trip */,
+				10F539AB2B9661A30041B0E4 /* Ant Colony Round-TripTests */,
+				10F539B52B9661A30041B0E4 /* Ant Colony Round-TripUITests */,
+				10F539982B9661A20041B0E4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		10F539982B9661A20041B0E4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				10F539972B9661A20041B0E4 /* Ant Colony Round-Trip.app */,
+				10F539A82B9661A30041B0E4 /* Ant Colony Round-TripTests.xctest */,
+				10F539B22B9661A30041B0E4 /* Ant Colony Round-TripUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		10F539992B9661A20041B0E4 /* Ant Colony Round-Trip */ = {
+			isa = PBXGroup;
+			children = (
+				10F5399A2B9661A20041B0E4 /* Ant_Colony_Round_TripApp.swift */,
+				10F5399C2B9661A20041B0E4 /* ContentView.swift */,
+				10F5399E2B9661A30041B0E4 /* Assets.xcassets */,
+				10F539A32B9661A30041B0E4 /* Ant_Colony_Round_Trip.entitlements */,
+				10F539A02B9661A30041B0E4 /* Preview Content */,
+			);
+			path = "Ant Colony Round-Trip";
+			sourceTree = "<group>";
+		};
+		10F539A02B9661A30041B0E4 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				10F539A12B9661A30041B0E4 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		10F539AB2B9661A30041B0E4 /* Ant Colony Round-TripTests */ = {
+			isa = PBXGroup;
+			children = (
+				10F539AC2B9661A30041B0E4 /* Ant_Colony_Round_TripTests.swift */,
+			);
+			path = "Ant Colony Round-TripTests";
+			sourceTree = "<group>";
+		};
+		10F539B52B9661A30041B0E4 /* Ant Colony Round-TripUITests */ = {
+			isa = PBXGroup;
+			children = (
+				10F539B62B9661A30041B0E4 /* Ant_Colony_Round_TripUITests.swift */,
+				10F539B82B9661A30041B0E4 /* Ant_Colony_Round_TripUITestsLaunchTests.swift */,
+			);
+			path = "Ant Colony Round-TripUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		10F539962B9661A20041B0E4 /* Ant Colony Round-Trip */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 10F539BC2B9661A30041B0E4 /* Build configuration list for PBXNativeTarget "Ant Colony Round-Trip" */;
+			buildPhases = (
+				10F539932B9661A20041B0E4 /* Sources */,
+				10F539942B9661A20041B0E4 /* Frameworks */,
+				10F539952B9661A20041B0E4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Ant Colony Round-Trip";
+			productName = "Ant Colony Round-Trip";
+			productReference = 10F539972B9661A20041B0E4 /* Ant Colony Round-Trip.app */;
+			productType = "com.apple.product-type.application";
+		};
+		10F539A72B9661A30041B0E4 /* Ant Colony Round-TripTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 10F539BF2B9661A30041B0E4 /* Build configuration list for PBXNativeTarget "Ant Colony Round-TripTests" */;
+			buildPhases = (
+				10F539A42B9661A30041B0E4 /* Sources */,
+				10F539A52B9661A30041B0E4 /* Frameworks */,
+				10F539A62B9661A30041B0E4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				10F539AA2B9661A30041B0E4 /* PBXTargetDependency */,
+			);
+			name = "Ant Colony Round-TripTests";
+			productName = "Ant Colony Round-TripTests";
+			productReference = 10F539A82B9661A30041B0E4 /* Ant Colony Round-TripTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		10F539B12B9661A30041B0E4 /* Ant Colony Round-TripUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 10F539C22B9661A30041B0E4 /* Build configuration list for PBXNativeTarget "Ant Colony Round-TripUITests" */;
+			buildPhases = (
+				10F539AE2B9661A30041B0E4 /* Sources */,
+				10F539AF2B9661A30041B0E4 /* Frameworks */,
+				10F539B02B9661A30041B0E4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				10F539B42B9661A30041B0E4 /* PBXTargetDependency */,
+			);
+			name = "Ant Colony Round-TripUITests";
+			productName = "Ant Colony Round-TripUITests";
+			productReference = 10F539B22B9661A30041B0E4 /* Ant Colony Round-TripUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		10F5398F2B9661A20041B0E4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1520;
+				LastUpgradeCheck = 1520;
+				TargetAttributes = {
+					10F539962B9661A20041B0E4 = {
+						CreatedOnToolsVersion = 15.2;
+					};
+					10F539A72B9661A30041B0E4 = {
+						CreatedOnToolsVersion = 15.2;
+						TestTargetID = 10F539962B9661A20041B0E4;
+					};
+					10F539B12B9661A30041B0E4 = {
+						CreatedOnToolsVersion = 15.2;
+						TestTargetID = 10F539962B9661A20041B0E4;
+					};
+				};
+			};
+			buildConfigurationList = 10F539922B9661A20041B0E4 /* Build configuration list for PBXProject "Ant Colony Round-Trip" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 10F5398E2B9661A20041B0E4;
+			productRefGroup = 10F539982B9661A20041B0E4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				10F539962B9661A20041B0E4 /* Ant Colony Round-Trip */,
+				10F539A72B9661A30041B0E4 /* Ant Colony Round-TripTests */,
+				10F539B12B9661A30041B0E4 /* Ant Colony Round-TripUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		10F539952B9661A20041B0E4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				10F539A22B9661A30041B0E4 /* Preview Assets.xcassets in Resources */,
+				10F5399F2B9661A30041B0E4 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		10F539A62B9661A30041B0E4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		10F539B02B9661A30041B0E4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		10F539932B9661A20041B0E4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				10F5399D2B9661A20041B0E4 /* ContentView.swift in Sources */,
+				10F5399B2B9661A20041B0E4 /* Ant_Colony_Round_TripApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		10F539A42B9661A30041B0E4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				10F539AD2B9661A30041B0E4 /* Ant_Colony_Round_TripTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		10F539AE2B9661A30041B0E4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				10F539B92B9661A30041B0E4 /* Ant_Colony_Round_TripUITestsLaunchTests.swift in Sources */,
+				10F539B72B9661A30041B0E4 /* Ant_Colony_Round_TripUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		10F539AA2B9661A30041B0E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 10F539962B9661A20041B0E4 /* Ant Colony Round-Trip */;
+			targetProxy = 10F539A92B9661A30041B0E4 /* PBXContainerItemProxy */;
+		};
+		10F539B42B9661A30041B0E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 10F539962B9661A20041B0E4 /* Ant Colony Round-Trip */;
+			targetProxy = 10F539B32B9661A30041B0E4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		10F539BA2B9661A30041B0E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		10F539BB2B9661A30041B0E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		10F539BD2B9661A30041B0E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Ant Colony Round-Trip/Ant_Colony_Round_Trip.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Ant Colony Round-Trip/Preview Content\"";
+				DEVELOPMENT_TEAM = 6232MX4759;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "robertwiebe.Ant-Colony-Round-Trip";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		10F539BE2B9661A30041B0E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Ant Colony Round-Trip/Ant_Colony_Round_Trip.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Ant Colony Round-Trip/Preview Content\"";
+				DEVELOPMENT_TEAM = 6232MX4759;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "robertwiebe.Ant-Colony-Round-Trip";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		10F539C02B9661A30041B0E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6232MX4759;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "robertwiebe.Ant-Colony-Round-TripTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ant Colony Round-Trip.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Ant Colony Round-Trip";
+			};
+			name = Debug;
+		};
+		10F539C12B9661A30041B0E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6232MX4759;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "robertwiebe.Ant-Colony-Round-TripTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ant Colony Round-Trip.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Ant Colony Round-Trip";
+			};
+			name = Release;
+		};
+		10F539C32B9661A30041B0E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6232MX4759;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "robertwiebe.Ant-Colony-Round-TripUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "Ant Colony Round-Trip";
+			};
+			name = Debug;
+		};
+		10F539C42B9661A30041B0E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6232MX4759;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "robertwiebe.Ant-Colony-Round-TripUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "Ant Colony Round-Trip";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		10F539922B9661A20041B0E4 /* Build configuration list for PBXProject "Ant Colony Round-Trip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				10F539BA2B9661A30041B0E4 /* Debug */,
+				10F539BB2B9661A30041B0E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		10F539BC2B9661A30041B0E4 /* Build configuration list for PBXNativeTarget "Ant Colony Round-Trip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				10F539BD2B9661A30041B0E4 /* Debug */,
+				10F539BE2B9661A30041B0E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		10F539BF2B9661A30041B0E4 /* Build configuration list for PBXNativeTarget "Ant Colony Round-TripTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				10F539C02B9661A30041B0E4 /* Debug */,
+				10F539C12B9661A30041B0E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		10F539C22B9661A30041B0E4 /* Build configuration list for PBXNativeTarget "Ant Colony Round-TripUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				10F539C32B9661A30041B0E4 /* Debug */,
+				10F539C42B9661A30041B0E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 10F5398F2B9661A20041B0E4 /* Project object */;
+}
