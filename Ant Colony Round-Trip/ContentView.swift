@@ -6,16 +6,26 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct ContentView: View {
+    @State var places: [CLLocation] = [CLLocation(latitude: 36.8127, longitude: -119.7466)]
+    @State var searchString: String = ""
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, teammates (especially Omar)!")
-        }
-        .padding()
+            HStack {
+                TextField("Search cities", text: $searchString)
+                Button("Add place") {
+                    // put action here
+                }
+            }
+            Map() {
+                Annotation("Fresno State", coordinate: places[0].coordinate) {
+                    Circle()
+                }
+            }
+        }.padding()
     }
 }
 
