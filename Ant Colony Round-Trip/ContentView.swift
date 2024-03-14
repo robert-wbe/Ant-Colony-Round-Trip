@@ -22,3 +22,12 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
+
+/*
+ Search for cities
+ Add for cities
+ Calculate routes between cities
+ Add routes to Edge matrix
+ Run ACO on edge matrix
+ Visualize Pheromone values
+ */
