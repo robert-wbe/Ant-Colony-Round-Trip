@@ -13,6 +13,7 @@ struct ContentView: View {
     @State var routes: [MKRoute] = []
     @State var places: [MKMapItem] = []
     @State var searchPlace: String = ""
+    @State var editigPlaces: Bool = false
     
     var body: some View {
         VStack {
@@ -25,19 +26,60 @@ struct ContentView: View {
                 Button("Make route matrix") {
                     constructRouteMatrix()
                 }.buttonStyle(.borderedProminent)
+                    .disabled(editigPlaces)
             }
-            Map() {
-                ForEach(routes, id: \.self) { route in
-                    MapPolyline(route)
-                        .stroke(.orange, lineWidth: 5)
-                        .stroke(.shadow(.drop(color: .orange, radius: 5)))
-                }
-                ForEach(places, id: \.self) { place in
-                    Annotation(place.name ?? "No name", coordinate: place.placemark.coordinate) {
-                        Circle()
-                            .foregroundStyle(.red.gradient)
+            ZStack(alignment: .top) {
+                Map() {
+                    ForEach(routes, id: \.self) { route in
+                        MapPolyline(route)
+                            .stroke(.orange, lineWidth: 5)
+                            .stroke(.shadow(.drop(color: .orange, radius: 5)))
+                    }
+                    ForEach(Array(places.enumerated()), id: \.offset) { idx, place in
+                        Annotation(place.name ?? "No name", coordinate: place.placemark.coordinate) {
+                            if editigPlaces {
+                                Circle()
+                                    .frame(width: 20)
+                                    .foregroundStyle(.red.gradient)
+                                    .overlay {
+                                        Image(systemName: "minus")
+                                    }
+                                    .onTapGesture {
+                                        places.remove(at: idx)
+                                    }
+                            } else {
+                                Circle()
+                                    .foregroundStyle(.blue.gradient)
+                            }
+                        }
                     }
                 }
+                
+                HStack {
+                    GlassSearchBar(input: $searchPlace, placeholder: "Search cities")
+                        .overlay(alignment: .trailing) {
+                            Button(action: {
+                                addPlace()
+                                searchPlace = ""
+                            }) {
+                                Image(systemName: "plus")
+                                    .fontWeight(.light)
+                                    .padding(3)
+                            }
+                            .buttonStyle(.plain)
+                            .aspectRatio(1, contentMode: .fit)
+                            .background(.blue.gradient)
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
+                            .shadow(color: .blue.opacity(0.4), radius: 3)
+                            .padding(.trailing, 6.8)
+                            .disabled(searchPlace.isEmpty)
+                        }
+                        .font(.system(size: 20))
+                        .frame(width: 250)
+                        
+                    Spacer()
+                    
+                }.padding()
             }
         }.padding()
     }
@@ -76,6 +118,25 @@ struct ContentView: View {
             for j in i+1 ..< numPlaces {
                 addRoute(from: i, to: j)
             }
+        }
+    }
+}
+
+struct GlassSearchBar: View {
+    @Binding var input: String
+    var placeholder: String = ""
+    var body: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+            TextField(placeholder, text: $input)
+                .textFieldStyle(.plain)
+        }
+        .fontWeight(.ultraLight)
+        .padding(8)
+        .background {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(.thinMaterial)
+                .stroke(.gray)
         }
     }
 }
