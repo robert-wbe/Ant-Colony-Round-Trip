@@ -16,72 +16,78 @@ struct ContentView: View {
     @State var editigPlaces: Bool = false
     
     var body: some View {
-        VStack {
-            HStack {
-                TextField("Search cities", text: $searchPlace)
-                Button("Add place") {
-                    addPlace()
-                    searchPlace = ""
-                }.buttonStyle(.borderedProminent)
-                Button("Make route matrix") {
-                    constructRouteMatrix()
-                }.buttonStyle(.borderedProminent)
-                    .disabled(editigPlaces)
-            }
-            ZStack(alignment: .top) {
-                Map() {
-                    ForEach(routes, id: \.self) { route in
-                        MapPolyline(route)
-                            .stroke(.orange, lineWidth: 5)
-                            .stroke(.shadow(.drop(color: .orange, radius: 5)))
-                    }
-                    ForEach(Array(places.enumerated()), id: \.offset) { idx, place in
-                        Annotation(place.name ?? "No name", coordinate: place.placemark.coordinate) {
-                            if editigPlaces {
-                                Circle()
-                                    .frame(width: 20)
-                                    .foregroundStyle(.red.gradient)
-                                    .overlay {
-                                        Image(systemName: "minus")
-                                    }
-                                    .onTapGesture {
-                                        places.remove(at: idx)
-                                    }
-                            } else {
-                                Circle()
-                                    .foregroundStyle(.blue.gradient)
-                            }
+        ZStack(alignment: .top) {
+            Map() {
+                ForEach(routes, id: \.self) { route in
+                    MapPolyline(route)
+                        .stroke(.orange, lineWidth: 5)
+                        .stroke(.shadow(.drop(color: .orange, radius: 5)))
+                }
+                ForEach(Array(places.enumerated()), id: \.offset) { idx, place in
+                    Annotation(place.name ?? "No name", coordinate: place.placemark.coordinate) {
+                        if editigPlaces {
+                            Circle()
+                                .frame(width: 20)
+                                .foregroundStyle(.red.gradient)
+                                .overlay(alignment: .center) {
+                                    Image(systemName: "minus")
+                                }
+                                .onTapGesture {
+                                    places.remove(at: idx)
+                                }
+                        } else {
+                            Circle()
+                                .foregroundStyle(.blue.gradient)
                         }
                     }
                 }
-                
-                HStack {
-                    GlassSearchBar(input: $searchPlace, placeholder: "Search cities")
-                        .overlay(alignment: .trailing) {
-                            Button(action: {
-                                addPlace()
-                                searchPlace = ""
-                            }) {
-                                Image(systemName: "plus")
-                                    .fontWeight(.light)
-                                    .padding(3)
-                            }
-                            .buttonStyle(.plain)
-                            .aspectRatio(1, contentMode: .fit)
-                            .background(.blue.gradient)
-                            .clipShape(RoundedRectangle(cornerRadius: 5))
-                            .shadow(color: .blue.opacity(0.4), radius: 3)
-                            .padding(.trailing, 6.8)
-                            .disabled(searchPlace.isEmpty)
-                        }
-                        .font(.system(size: 20))
-                        .frame(width: 250)
-                        
-                    Spacer()
-                    
-                }.padding()
             }
-        }.padding()
+            
+            HStack {
+                GlassSearchBar(input: $searchPlace, placeholder: "Search cities")
+                    .overlay(alignment: .trailing) {
+                        Button(action: {
+                            addPlace()
+                        }) {
+                            Image(systemName: "plus")
+                                .fontWeight(.regular)
+                                .padding(3)
+                        }
+                        .buttonStyle(.plain)
+                        .aspectRatio(1, contentMode: .fit)
+                        .background(.blue.gradient)
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                        .shadow(color: .blue.opacity(0.4), radius: 3)
+                        .padding(.trailing, 6.8)
+                        .disabled(searchPlace.isEmpty)
+                    }
+                    .font(.system(size: 20))
+                    .frame(width: 250)
+                    
+                Spacer()
+                Button(action: {
+                    editigPlaces.toggle()
+                    if editigPlaces {
+                        routeMatrix.removeAll()
+                        routes.removeAll()
+                    }
+                }) {
+                    Label("Edit cities", systemImage: "checklist")
+                        .padding(6)
+                        .background(.indigo, in: RoundedRectangle(cornerRadius: 7.5))
+                }.buttonStyle(.plain)
+                    .disabled(places.isEmpty)
+                Button(action: {
+                    constructRouteMatrix()
+                    // TODO: ACO alogrithm
+                }) {
+                    Label("Run ACO", systemImage: "ant")
+                        .padding(6)
+                        .background(.brown, in: RoundedRectangle(cornerRadius: 7.5))
+                }.buttonStyle(.plain)
+                    .disabled(editigPlaces || places.count <= 1)
+            }.padding()
+        }
     }
     
     func addPlace() {
@@ -94,29 +100,35 @@ struct ContentView: View {
                 places.append(bestResult)
             }
         }
-    }
-    
-    func addRoute(from source: Int, to destination: Int) {
-        let request = MKDirections.Request()
-        request.source = places[source]
-        request.destination = places[destination]
-        Task {
-            let directions = MKDirections(request: request)
-            let response = try? await directions.calculate()
-            if let route = response?.routes.first {
-                routes.append(route)
-                routeMatrix[source][destination] = route
-                routeMatrix[destination][source] = route
-            }
-        }
+        searchPlace = ""
     }
     
     func constructRouteMatrix() {
         let numPlaces = places.count
-        routeMatrix = [[MKRoute]](repeating: [MKRoute](repeating: .init(), count: numPlaces), count: numPlaces)
-        for i in 0 ..< numPlaces {
-            for j in i+1 ..< numPlaces {
-                addRoute(from: i, to: j)
+        
+        Task {
+            try await withThrowingTaskGroup(of: (Int, Int, MKRoute?).self) { group in
+                for source in 0 ..< numPlaces {
+                    for destination in source+1 ..< numPlaces {
+                        group.addTask {
+                            let request = MKDirections.Request()
+                            request.source = places[source]
+                            request.destination = places[destination]
+                            let directions = MKDirections(request: request)
+                            let response = try? await directions.calculate()
+                            return (source, destination, response?.routes.first)
+                        }
+                    }
+                }
+                routeMatrix = [[MKRoute]](repeating: [MKRoute](repeating: .init(), count: numPlaces), count: numPlaces)
+                
+                for try await (src, dst, route) in group {
+                    if let route = route {
+                        routeMatrix[src][dst] = route
+                        routeMatrix[dst][src] = route
+                        routes.append(route)
+                    }
+                }
             }
         }
     }
@@ -131,7 +143,7 @@ struct GlassSearchBar: View {
             TextField(placeholder, text: $input)
                 .textFieldStyle(.plain)
         }
-        .fontWeight(.ultraLight)
+        .fontWeight(.light)
         .padding(8)
         .background {
             RoundedRectangle(cornerRadius: 10)
