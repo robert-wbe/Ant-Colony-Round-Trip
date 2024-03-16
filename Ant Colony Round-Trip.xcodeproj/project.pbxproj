@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		10E8E4E42BA61AF600C20F09 /* Place Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E8E4E32BA61AF600C20F09 /* Place Presets.swift */; };
 		10F5399B2B9661A20041B0E4 /* Ant_Colony_Round_TripApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F5399A2B9661A20041B0E4 /* Ant_Colony_Round_TripApp.swift */; };
 		10F5399D2B9661A20041B0E4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F5399C2B9661A20041B0E4 /* ContentView.swift */; };
 		10F5399F2B9661A30041B0E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 10F5399E2B9661A30041B0E4 /* Assets.xcassets */; };
@@ -34,6 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		10E8E4E32BA61AF600C20F09 /* Place Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Place Presets.swift"; sourceTree = "<group>"; };
 		10F539972B9661A20041B0E4 /* Ant Colony Round-Trip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ant Colony Round-Trip.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		10F5399A2B9661A20041B0E4 /* Ant_Colony_Round_TripApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ant_Colony_Round_TripApp.swift; sourceTree = "<group>"; };
 		10F5399C2B9661A20041B0E4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 				10F5399E2B9661A30041B0E4 /* Assets.xcassets */,
 				10F539A32B9661A30041B0E4 /* Ant_Colony_Round_Trip.entitlements */,
 				10F539A02B9661A30041B0E4 /* Preview Content */,
+				10E8E4E32BA61AF600C20F09 /* Place Presets.swift */,
 			);
 			path = "Ant Colony Round-Trip";
 			sourceTree = "<group>";
@@ -260,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				10F5399D2B9661A20041B0E4 /* ContentView.swift in Sources */,
+				10E8E4E42BA61AF600C20F09 /* Place Presets.swift in Sources */,
 				10F5399B2B9661A20041B0E4 /* Ant_Colony_Round_TripApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,7 +9,8 @@ import SwiftUI
 import MapKit
 
 struct ContentView: View {
-    @State var routeMatrix: [[MKRoute]] = []
+    @State var routeMatrix: [[MKRoute?]] = []
+    @State var pheromoneMatrix: [[Double]] = []
     @State var routes: [MKRoute] = []
     @State var places: [MKMapItem] = []
     @State var searchPlace: String = ""
@@ -18,10 +19,14 @@ struct ContentView: View {
     var body: some View {
         ZStack(alignment: .top) {
             Map() {
-                ForEach(routes, id: \.self) { route in
-                    MapPolyline(route)
-                        .stroke(.orange, lineWidth: 5)
-                        .stroke(.shadow(.drop(color: .orange, radius: 5)))
+                ForEach(Array(routeMatrix.enumerated()), id: \.offset) { i, row in
+                    ForEach(Array(row.enumerated()), id: \.offset) { j, route in
+                        if let route = route {
+                            let pheromone = pheromoneMatrix[i][j]
+                            MapPolyline(route)
+                                .stroke(.orange.opacity(pheromone), lineWidth: 5)
+                        }
+                    }
                 }
                 ForEach(Array(places.enumerated()), id: \.offset) { idx, place in
                     Annotation(place.name ?? "No name", coordinate: place.placemark.coordinate) {
@@ -34,6 +39,9 @@ struct ContentView: View {
                                 }
                                 .onTapGesture {
                                     places.remove(at: idx)
+                                    if (places.isEmpty) {
+                                        editigPlaces = false
+                                    }
                                 }
                         } else {
                             Circle()
@@ -44,25 +52,26 @@ struct ContentView: View {
             }
             
             HStack {
-                GlassSearchBar(input: $searchPlace, placeholder: "Search cities")
-                    .overlay(alignment: .trailing) {
-                        Button(action: {
-                            addPlace()
-                        }) {
-                            Image(systemName: "plus")
-                                .fontWeight(.regular)
-                                .padding(3)
-                        }
-                        .buttonStyle(.plain)
-                        .aspectRatio(1, contentMode: .fit)
-                        .background(.blue.gradient)
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                        .shadow(color: .blue.opacity(0.4), radius: 3)
-                        .padding(.trailing, 6.8)
-                        .disabled(searchPlace.isEmpty)
+                ZStack(alignment: .trailing) {
+                    GlassSearchBar(input: $searchPlace, placeholder: "Search cities")
+                        .font(.system(size: 20))
+                    Button(action: {
+                        addPlace()
+                    }) {
+                        Label("Add", systemImage: "plus")
+                            .font(.system(size: 15, weight: .medium, design: .rounded))
+                            .padding(3)
+                            .shadow(radius: 10)
                     }
-                    .font(.system(size: 20))
-                    .frame(width: 250)
+                    .buttonStyle(.plain)
+                    .background(.blue.gradient)
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                    .shadow(color: .blue.opacity(0.4), radius: 3)
+                    .padding(6.8)
+                    .disabled(searchPlace.isEmpty)
+                }
+                
+                .frame(width: 250)
                     
                 Spacer()
                 Button(action: {
@@ -122,7 +131,8 @@ struct ContentView: View {
                         }
                     }
                 }
-                routeMatrix = [[MKRoute]](repeating: [MKRoute](repeating: .init(), count: numPlaces), count: numPlaces)
+                routeMatrix = [[MKRoute?]](repeating: [MKRoute?](repeating: nil, count: numPlaces), count: numPlaces)
+                pheromoneMatrix = [[Double]](repeating: [Double](repeating: 1, count: numPlaces), count: numPlaces)
                 
                 for try await (src, dst, route) in group {
                     if let route = route {
