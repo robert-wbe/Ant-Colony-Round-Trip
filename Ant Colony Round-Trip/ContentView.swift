@@ -29,8 +29,8 @@ struct ContentView: View {
                     }
                 }
                 ForEach(Array(places.enumerated()), id: \.offset) { idx, place in
-                    Annotation(place.name ?? "No name", coordinate: place.placemark.coordinate) {
-                        if editigPlaces {
+                    if editigPlaces {
+                        Annotation(place.name ?? "No name", coordinate: place.placemark.coordinate) {
                             Circle()
                                 .frame(width: 20)
                                 .foregroundStyle(.red.gradient)
@@ -43,10 +43,10 @@ struct ContentView: View {
                                         editigPlaces = false
                                     }
                                 }
-                        } else {
-                            Circle()
-                                .foregroundStyle(.blue.gradient)
                         }
+                    } else {
+                        Marker(place.name ?? "Unnamed place", systemImage: "mappin", coordinate: place.placemark.coordinate
+                        ).tint(.blue)
                     }
                 }
             }
@@ -55,6 +55,10 @@ struct ContentView: View {
                 ZStack(alignment: .trailing) {
                     GlassSearchBar(input: $searchPlace, placeholder: "Search cities")
                         .font(.system(size: 20))
+                        .onKeyPress(.return) {
+                            addPlace()
+                            return .handled
+                        }
                     Button(action: {
                         addPlace()
                     }) {
@@ -88,7 +92,7 @@ struct ContentView: View {
                     .disabled(places.isEmpty)
                 Button(action: {
                     constructRouteMatrix()
-                    // TODO: ACO alogrithm
+                    runACO()
                 }) {
                     Label("Run ACO", systemImage: "ant")
                         .padding(6)
@@ -143,6 +147,10 @@ struct ContentView: View {
                 }
             }
         }
+    }
+    
+    func runACO() {
+        
     }
 }
 
