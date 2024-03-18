@@ -8,13 +8,19 @@
 import SwiftUI
 import MapKit
 
+
+
 struct ContentView: View {
     @State var routeMatrix: [[MKRoute?]] = []
-    @State var pheromoneMatrix: [[Double]] = []
-    @State var routes: [MKRoute] = []
+    @ObservedObject var aco = AntColonyOptimizer()
+    
     @State var places: [MKMapItem] = []
     @State var searchPlace: String = ""
     @State var editigPlaces: Bool = false
+    @State var settingsSheetPresenetd: Bool = false
+    
+    @State var fetchingRoutes: Bool = false
+    @State var routesCalculated: Int = 0
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -22,7 +28,7 @@ struct ContentView: View {
                 ForEach(Array(routeMatrix.enumerated()), id: \.offset) { i, row in
                     ForEach(Array(row.enumerated()), id: \.offset) { j, route in
                         if let route = route {
-                            let pheromone = pheromoneMatrix[i][j]
+                            let pheromone = aco.pheromoneMatrix[i][j]
                             MapPolyline(route)
                                 .stroke(.orange.opacity(pheromone), lineWidth: 5)
                         }
@@ -49,58 +55,92 @@ struct ContentView: View {
                         ).tint(.blue)
                     }
                 }
+            }.overlay {
+                if fetchingRoutes {
+                    progressView
+                }
             }
             
-            HStack {
-                ZStack(alignment: .trailing) {
-                    GlassSearchBar(input: $searchPlace, placeholder: "Search cities")
-                        .font(.system(size: 20))
-                        .onKeyPress(.return) {
-                            addPlace()
-                            return .handled
-                        }
-                    Button(action: {
+            toolbar
+        }
+    }
+    
+    var toolbar: some View {
+        HStack {
+            ZStack(alignment: .trailing) {
+                GlassSearchBar(input: $searchPlace, placeholder: "Search cities")
+                    .font(.system(size: 20))
+                    .onKeyPress(.return) {
                         addPlace()
-                    }) {
-                        Label("Add", systemImage: "plus")
-                            .font(.system(size: 15, weight: .medium, design: .rounded))
-                            .padding(3)
-                            .shadow(radius: 10)
+                        return .handled
                     }
-                    .buttonStyle(.plain)
-                    .background(.blue.gradient)
-                    .clipShape(RoundedRectangle(cornerRadius: 5))
-                    .shadow(color: .blue.opacity(0.4), radius: 3)
-                    .padding(6.8)
-                    .disabled(searchPlace.isEmpty)
-                }
-                
-                .frame(width: 250)
-                    
-                Spacer()
                 Button(action: {
-                    editigPlaces.toggle()
-                    if editigPlaces {
-                        routeMatrix.removeAll()
-                        routes.removeAll()
-                    }
+                    addPlace()
                 }) {
-                    Label("Edit cities", systemImage: "checklist")
-                        .padding(6)
-                        .background(.indigo, in: RoundedRectangle(cornerRadius: 7.5))
-                }.buttonStyle(.plain)
-                    .disabled(places.isEmpty)
+                    Label("Add", systemImage: "plus")
+                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                        .padding(3)
+                        .shadow(radius: 10)
+                }
+                .buttonStyle(.plain)
+                .background(.blue.gradient)
+                .clipShape(RoundedRectangle(cornerRadius: 5))
+                .shadow(color: .blue.opacity(0.4), radius: 3)
+                .padding(6.8)
+                .disabled(searchPlace.isEmpty)
+            }
+            
+            .frame(width: 250)
+                
+            Spacer()
+            Button(action: {
+                editigPlaces.toggle()
+                if editigPlaces {
+                    routeMatrix.removeAll()
+                }
+            }) {
+                Label("Edit cities", systemImage: "checklist")
+                    .padding(6)
+                    .background(.indigo, in: RoundedRectangle(cornerRadius: 7.5))
+            }.buttonStyle(.plain)
+                .disabled(places.isEmpty)
+            HStack {
                 Button(action: {
                     constructRouteMatrix()
-                    runACO()
-                }) {
-                    Label("Run ACO", systemImage: "ant")
-                        .padding(6)
-                        .background(.brown, in: RoundedRectangle(cornerRadius: 7.5))
-                }.buttonStyle(.plain)
-                    .disabled(editigPlaces || places.count <= 1)
-            }.padding()
-        }
+                    aco.startACO()
+                }) { Label("Run ACO", systemImage: "ant") }
+                .buttonStyle(.plain)
+                .disabled(editigPlaces || places.count <= 1)
+                Divider().frame(height: 15)
+                Button(action: {
+                    settingsSheetPresenetd = true
+                }) { Image(systemName: "gearshape").font(.body) }
+                .buttonStyle(.plain)
+                .sheet(isPresented: $settingsSheetPresenetd) {
+                    ACOParamsEditor(acoParams: $aco.params, isPresented: $settingsSheetPresenetd)
+                        .frame(width: 600)
+                }
+            }
+            .padding(5)
+            .background(.brown, in: RoundedRectangle(cornerRadius: 7.5))
+        }.padding()
+    }
+    
+    var progressView: some View {
+        let routesCount = places.count * (places.count-1)
+        return ProgressView(value: Double(routesCalculated), total: Double(routesCount),
+                label: {
+                    Text("Calculating routes...")
+                        .padding(.bottom, 4)
+                }, currentValueLabel: {
+                    let formatted = (Double(routesCalculated) / Double(routesCount)).formatted(.percent.precision(.fractionLength(0...2)))
+                    Text("\(formatted)")
+                        .padding(.top, 4)
+                }
+        )
+        .progressViewStyle(.circular)
+        .padding()
+        .background(.thickMaterial, in: RoundedRectangle(cornerRadius: 20))
     }
     
     /// Get the best match for user-inputted search string from the MapKit API, add it to `places`.
@@ -127,8 +167,8 @@ struct ContentView: View {
                     for destination in source+1 ..< numPlaces {
                         group.addTask {
                             let request = MKDirections.Request()
-                            request.source = places[source]
-                            request.destination = places[destination]
+                            request.source = await places[source]
+                            request.destination = await places[destination]
                             let directions = MKDirections(request: request)
                             let response = try? await directions.calculate()
                             return (source, destination, response?.routes.first)
@@ -136,15 +176,18 @@ struct ContentView: View {
                     }
                 }
                 routeMatrix = [[MKRoute?]](repeating: [MKRoute?](repeating: nil, count: numPlaces), count: numPlaces)
-                pheromoneMatrix = [[Double]](repeating: [Double](repeating: 1, count: numPlaces), count: numPlaces)
+                aco.initializePheromones(numNodes: numPlaces)
                 
+                routesCalculated = 0
+                fetchingRoutes = true
                 for try await (src, dst, route) in group {
                     if let route = route {
                         routeMatrix[src][dst] = route
                         routeMatrix[dst][src] = route
-                        routes.append(route)
                     }
+                    routesCalculated += 1
                 }
+                fetchingRoutes = false
             }
         }
     }
@@ -153,6 +196,60 @@ struct ContentView: View {
         
     }
 }
+
+struct ACOParamsEditor: View {
+    @Binding var acoParams: AntColonyOptimizer.Params
+    @Binding var isPresented: Bool
+    
+    var body: some View {
+        Form {
+            Section("Ant parameters (pheromone weighting vs. heuristic weighting)") {
+                Slider(value: $acoParams.alpha, in: 0...2, step: 0.05, label: {
+                    Text("α (pheromone) = \(acoParams.alpha, specifier: "%.2f")")
+                }, minimumValueLabel: {
+                    Text("0.0")
+                }, maximumValueLabel: {
+                    Text("2.0")
+                })
+                Slider(value: $acoParams.beta, in: 0...2, step: 0.05, label: {
+                    Text("β (heuristic) = \(acoParams.beta, specifier: "%.2f")")
+                }, minimumValueLabel: {
+                    Text("0.0")
+                }, maximumValueLabel: {
+                    Text("2.0")
+                })
+            }
+            Divider()
+            Section("Evaporation rate") {
+                HStack(alignment: .top, spacing: 0) {
+                    Text("ρ = \(acoParams.evaporationRate, specifier: "%.2f")")
+                    VStack {
+                        Slider(value: $acoParams.evaporationRate, in: 0...1, step: 0.05, label: {}, minimumValueLabel: {
+                            Text("0.0")
+                        }, maximumValueLabel: {
+                            Text("1.0")
+                        })
+                        HStack(spacing: 3) {
+                            Text("Pushes toward")
+                            Text("Exploitation").fontWeight(.bold).foregroundStyle(.orange)
+                            Spacer()
+                            Text("Pushes toward")
+                            Text("Exploration").fontWeight(.bold).foregroundStyle(.cyan)
+                        }.padding(.leading, 8)
+                    }
+                }
+            }
+            HStack {
+                Spacer()
+                Button("Done") {
+                    isPresented = false
+                }.buttonStyle(.borderedProminent)
+            }
+        }.padding()
+    }
+}
+
+
 
 /// A glossy, translucent search bar
 struct GlassSearchBar: View {
@@ -176,6 +273,11 @@ struct GlassSearchBar: View {
 
 #Preview {
     ContentView()
+}
+
+#Preview {
+    ACOParamsEditor(acoParams: .constant(.init(alpha: 1, beta: 1, evaporationRate: 1)), isPresented: .constant(true))
+        .frame(width: 600)
 }
 
 /*
