@@ -276,7 +276,7 @@ struct GlassSearchBar: View {
 }
 
 #Preview {
-    ACOParamsEditor(acoParams: .constant(.init(alpha: 1, beta: 1, evaporationRate: 1)), isPresented: .constant(true))
+    ACOParamsEditor(acoParams: .constant(.init(alpha: 1, beta: 1, evaporationRate: 1, generationSize: 50)), isPresented: .constant(true))
         .frame(width: 600)
 }
 
