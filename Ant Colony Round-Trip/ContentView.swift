@@ -206,6 +206,7 @@ struct ACOParamsEditor: View {
             Section("Ant parameters (pheromone weighting vs. heuristic weighting)") {
                 Slider(value: $acoParams.alpha, in: 0...2, step: 0.05, label: {
                     Text("α (pheromone) = \(acoParams.alpha, specifier: "%.2f")")
+                        .frame(width: 150, alignment: .trailing)
                 }, minimumValueLabel: {
                     Text("0.0")
                 }, maximumValueLabel: {
@@ -213,6 +214,7 @@ struct ACOParamsEditor: View {
                 })
                 Slider(value: $acoParams.beta, in: 0...2, step: 0.05, label: {
                     Text("β (heuristic) = \(acoParams.beta, specifier: "%.2f")")
+                        .frame(width: 150, alignment: .trailing)
                 }, minimumValueLabel: {
                     Text("0.0")
                 }, maximumValueLabel: {
