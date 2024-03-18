@@ -106,9 +106,12 @@ struct ContentView: View {
                 .disabled(places.isEmpty)
             HStack {
                 Button(action: {
-                    constructRouteMatrix()
-                    aco.startACO()
-                }) { Label("Run ACO", systemImage: "ant") }
+                    if aco.runningACO {
+                        aco.runningACO = false
+                    } else {
+                        constructRouteMatrix()
+                    }
+                }) { aco.runningACO ? Label("Stop ACO", systemImage: "xmark") : Label("Run ACO", systemImage: "ant") }
                 .buttonStyle(.plain)
                 .disabled(editigPlaces || places.count <= 1)
                 Divider().frame(height: 15)
@@ -127,7 +130,7 @@ struct ContentView: View {
     }
     
     var progressView: some View {
-        let routesCount = places.count * (places.count-1)
+        let routesCount = places.count * (places.count-1) / 2
         return ProgressView(value: Double(routesCalculated), total: Double(routesCount),
                 label: {
                     Text("Calculating routes...")
@@ -176,7 +179,7 @@ struct ContentView: View {
                     }
                 }
                 routeMatrix = [[MKRoute?]](repeating: [MKRoute?](repeating: nil, count: numPlaces), count: numPlaces)
-                aco.initializePheromones(numNodes: numPlaces)
+                aco.initializeMatrices(numNodes: numPlaces)
                 
                 routesCalculated = 0
                 fetchingRoutes = true
@@ -184,12 +187,18 @@ struct ContentView: View {
                     if let route = route {
                         routeMatrix[src][dst] = route
                         routeMatrix[dst][src] = route
+                        aco.heuristicMatrix[src][dst] = 10000 / route.expectedTravelTime
+                        aco.heuristicMatrix[dst][src] = 10000 / route.expectedTravelTime
                     }
                     routesCalculated += 1
                 }
                 fetchingRoutes = false
+                aco.startACO()
             }
+            
         }
+        
+        
     }
     
     func runACO() {
