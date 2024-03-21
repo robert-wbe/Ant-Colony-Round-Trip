@@ -12,7 +12,7 @@ import MapKit
 
 struct ContentView: View {
     @State var routeMatrix: [[MKRoute?]] = []
-    @ObservedObject var aco = AntColonyOptimizer()
+    @StateObject var aco = AntColonyOptimizer()
     
     @State var places: [MKMapItem] = []
     @State var searchPlace: String = ""
@@ -104,6 +104,15 @@ struct ContentView: View {
                     .background(.indigo, in: RoundedRectangle(cornerRadius: 7.5))
             }.buttonStyle(.plain)
                 .disabled(places.isEmpty)
+                .overlay {
+                    if editigPlaces {
+                        Button("Delete All") {
+                            places.removeAll()
+                            editigPlaces = false
+                        }.offset(y: 30)
+                            .buttonStyle(.borderedProminent)
+                    }
+                }
             HStack {
                 Button(action: {
                     if aco.runningACO {
@@ -119,6 +128,7 @@ struct ContentView: View {
                     settingsSheetPresenetd = true
                 }) { Image(systemName: "gearshape").font(.body) }
                 .buttonStyle(.plain)
+                .disabled(aco.runningACO)
                 .sheet(isPresented: $settingsSheetPresenetd) {
                     ACOParamsEditor(acoParams: $aco.params, isPresented: $settingsSheetPresenetd)
                         .frame(width: 600)
@@ -126,7 +136,22 @@ struct ContentView: View {
             }
             .padding(5)
             .background(.brown, in: RoundedRectangle(cornerRadius: 7.5))
+            .overlay {
+                if aco.runningACO {
+                    acoInfoView
+                        .offset(x: -14, y: 45)
+                }
+            }
         }.padding()
+    }
+    
+    var acoInfoView: some View {
+        VStack(alignment: .leading) {
+            Label("Iteration: \(aco.iteration)", systemImage: "number")
+            Label("Travel time: \(formatTimeInterval(aco.curTravelTime))", systemImage: "timer")
+        }.frame(width: 140)
+        .padding(5)
+        .background(.thickMaterial, in: RoundedRectangle(cornerRadius: 5))
     }
     
     var progressView: some View {
@@ -136,9 +161,11 @@ struct ContentView: View {
                     Text("Calculating routes...")
                         .padding(.bottom, 4)
                 }, currentValueLabel: {
-                    let formatted = (Double(routesCalculated) / Double(routesCount)).formatted(.percent.precision(.fractionLength(0...2)))
-                    Text("\(formatted)")
-                        .padding(.top, 4)
+                    let percentage = (Double(routesCalculated) / Double(routesCount)).formatted(.percent.precision(.fractionLength(0...2)))
+                    VStack {
+                        Text("\(percentage)").fontWeight(.semibold)
+                        Text("\(routesCalculated)/\(routesCount)")
+                    }.padding(.top, 4)
                 }
         )
         .progressViewStyle(.circular)
@@ -187,8 +214,8 @@ struct ContentView: View {
                     if let route = route {
                         routeMatrix[src][dst] = route
                         routeMatrix[dst][src] = route
-                        aco.heuristicMatrix[src][dst] = 10000 / route.expectedTravelTime
-                        aco.heuristicMatrix[dst][src] = 10000 / route.expectedTravelTime
+                        aco.heuristicMatrix[src][dst] = AntColonyOptimizer.divisionFactor / route.expectedTravelTime
+                        aco.heuristicMatrix[dst][src] = AntColonyOptimizer.divisionFactor / route.expectedTravelTime
                     }
                     routesCalculated += 1
                 }
@@ -201,8 +228,11 @@ struct ContentView: View {
         
     }
     
-    func runACO() {
+    func formatTimeInterval(_ timeInterval: TimeInterval) -> String {
+        let hours = Int(timeInterval) / 3600
+        let minutes = Int(timeInterval) / 60 % 60
         
+        return String(format: "%02d:%02d", hours, minutes)
     }
 }
 
@@ -221,14 +251,29 @@ struct ACOParamsEditor: View {
                 }, maximumValueLabel: {
                     Text("2.0")
                 })
-                Slider(value: $acoParams.beta, in: 0...2, step: 0.05, label: {
+                Slider(value: $acoParams.beta, in: 0...3, step: 0.05, label: {
                     Text("β (heuristic) = \(acoParams.beta, specifier: "%.2f")")
                         .frame(width: 150, alignment: .trailing)
                 }, minimumValueLabel: {
                     Text("0.0")
                 }, maximumValueLabel: {
-                    Text("2.0")
+                    Text("3.0")
                 })
+            }
+            Divider()
+            Section("Generation size") {
+                HStack {
+                    
+                    TextField("Gen size", text: .init(get: {
+                        acoParams.generationSize.description
+                    }, set: {
+                        acoParams.generationSize = Int($0) ?? 50
+                    })).frame(width: 100)
+                        .textFieldStyle(.roundedBorder)
+                    Stepper("", value: $acoParams.generationSize, in: 10...100)
+                }
+                .offset(x: 27)
+                .padding(.bottom, 5)
             }
             Divider()
             Section("Evaporation rate") {
@@ -287,7 +332,7 @@ struct GlassSearchBar: View {
 }
 
 #Preview {
-    ACOParamsEditor(acoParams: .constant(.init(alpha: 1, beta: 1, evaporationRate: 1, generationSize: 50)), isPresented: .constant(true))
+    ACOParamsEditor(acoParams: .constant(.init(alpha: 1, beta: 2, evaporationRate: 0.3, generationSize: 50)), isPresented: .constant(true))
         .frame(width: 600)
 }
 
