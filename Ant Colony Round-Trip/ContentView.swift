@@ -8,7 +8,66 @@
 import SwiftUI
 import MapKit
 
-
+class DataManager {
+    init(routeCounter: Binding<Int>) {
+        self._routeCounter = routeCounter
+    }
+    
+    static let maxCalls = 50
+    static let waitTime: UInt64 = 60
+    var callsDone: Int = 0
+    var resumeTime: Date? = nil
+    @Binding var routeCounter: Int
+    
+    func fetchRoutes(places: [MKMapItem]) async throws -> [[MKRoute?]] {
+        let numPlaces: Int = places.count
+        return try await withThrowingTaskGroup(of: (Int, Int, MKRoute?).self) { group in
+            var routeMatrix = [[MKRoute?]](repeating: [MKRoute?](repeating: nil, count: numPlaces), count: numPlaces)
+            
+            for source in 0 ..< numPlaces {
+                for destination in source+1 ..< numPlaces {
+                    group.addTask {
+                        while let resumeTime = self.resumeTime {
+                            if Date.now >= resumeTime {
+                                self.resumeTime = nil
+                            } else {
+                                try await Task.sleep(nanoseconds: (Self.waitTime + 2) * 1000000000)
+                            }
+                        }
+                        
+                        self.callsDone += 1
+                        self.routeCounter += 1
+                        if self.callsDone == Self.maxCalls {
+                            self.resumeTime = Date.now + TimeInterval(Self.waitTime)
+                            self.callsDone = 0
+                        }
+                        let route = try await self.fetchRoute(source: places[source], dest: places[destination])
+                        return (source, destination, route)
+                    }
+                }
+            }
+            
+            for try await (src, dst, route) in group {
+                if let route = route {
+                    routeMatrix[src][dst] = route
+                    routeMatrix[dst][src] = route
+                }
+            }
+            
+            routeCounter = 0
+            return routeMatrix
+        }
+    }
+    
+    func fetchRoute(source: MKMapItem, dest: MKMapItem) async throws -> MKRoute? {
+        let request = MKDirections.Request()
+        request.source = source
+        request.destination = dest
+        let directions = MKDirections(request: request)
+        let response = try? await directions.calculate()
+        return response?.routes.first
+    }
+}
 
 struct ContentView: View {
     @State var routeMatrix: [[MKRoute?]] = []
@@ -28,7 +87,7 @@ struct ContentView: View {
                 ForEach(Array(routeMatrix.enumerated()), id: \.offset) { i, row in
                     ForEach(Array(row.enumerated()), id: \.offset) { j, route in
                         if let route = route {
-                            let pheromone = aco.pheromoneMatrix[i][j]
+                            let pheromone = aco.pheromoneMatrix[i][j] / aco.pheromoneMax
                             MapPolyline(route)
                                 .stroke(.orange.opacity(pheromone), lineWidth: 5)
                         }
@@ -93,26 +152,43 @@ struct ContentView: View {
             .frame(width: 250)
                 
             Spacer()
-            Button(action: {
-                editigPlaces.toggle()
-                if editigPlaces {
-                    routeMatrix.removeAll()
-                }
-            }) {
-                Label("Edit cities", systemImage: "checklist")
-                    .padding(6)
-                    .background(.indigo, in: RoundedRectangle(cornerRadius: 7.5))
-            }.buttonStyle(.plain)
+            HStack {
+                Button(action: {
+                    editigPlaces.toggle()
+                    if editigPlaces {
+                        routeMatrix.removeAll()
+                    }
+                }) {
+                    Label("Edit cities", systemImage: "checklist")
+                        
+                }.buttonStyle(.plain)
                 .disabled(places.isEmpty)
                 .overlay {
                     if editigPlaces {
                         Button("Delete All") {
                             places.removeAll()
                             editigPlaces = false
-                        }.offset(y: 30)
-                            .buttonStyle(.borderedProminent)
+                        }
+                        .offset(y: 30)
+                        .buttonStyle(.borderedProminent)
                     }
                 }
+                Divider().frame(height: 15)
+                Menu(content: {
+                    Section("Presets") {
+                        ForEach(PresetPlaceGroups) {group in
+                            Button(group.name) {
+                                self.places = group.places
+                            }
+                        }
+                    }
+                }, label: {
+                    Image(systemName: "list.star")
+                }).menuStyle(.borderlessButton)
+                    .frame(width: 32)
+            }
+            .padding(6)
+            .background(.indigo, in: RoundedRectangle(cornerRadius: 7.5))
             HStack {
                 Button(action: {
                     if aco.runningACO {
@@ -180,7 +256,7 @@ struct ContentView: View {
         Task {
             let results = try? await MKLocalSearch(request: request).start()
             let bestResult = results?.mapItems[0]
-            if let bestResult = bestResult{
+            if let bestResult = bestResult {
                 places.append(bestResult)
             }
         }
@@ -192,37 +268,20 @@ struct ContentView: View {
         let numPlaces = places.count
         
         Task {
-            try await withThrowingTaskGroup(of: (Int, Int, MKRoute?).self) { group in
-                for source in 0 ..< numPlaces {
-                    for destination in source+1 ..< numPlaces {
-                        group.addTask {
-                            let request = MKDirections.Request()
-                            request.source = await places[source]
-                            request.destination = await places[destination]
-                            let directions = MKDirections(request: request)
-                            let response = try? await directions.calculate()
-                            return (source, destination, response?.routes.first)
-                        }
+            self.fetchingRoutes = true
+            aco.initializeMatrices(numNodes: numPlaces)
+            self.routeMatrix = try await DataManager(routeCounter: $routesCalculated).fetchRoutes(places: self.places)
+            
+            for i in 0 ..< numPlaces {
+                for j in 0 ..< numPlaces {
+                    if let route = routeMatrix[i][j] {
+                        aco.pheromoneMatrix[i][j] = AntColonyOptimizer.divisionFactor / route.expectedTravelTime
                     }
                 }
-                routeMatrix = [[MKRoute?]](repeating: [MKRoute?](repeating: nil, count: numPlaces), count: numPlaces)
-                aco.initializeMatrices(numNodes: numPlaces)
-                
-                routesCalculated = 0
-                fetchingRoutes = true
-                for try await (src, dst, route) in group {
-                    if let route = route {
-                        routeMatrix[src][dst] = route
-                        routeMatrix[dst][src] = route
-                        aco.heuristicMatrix[src][dst] = AntColonyOptimizer.divisionFactor / route.expectedTravelTime
-                        aco.heuristicMatrix[dst][src] = AntColonyOptimizer.divisionFactor / route.expectedTravelTime
-                    }
-                    routesCalculated += 1
-                }
-                fetchingRoutes = false
-                aco.startACO()
             }
             
+            self.fetchingRoutes = false
+            aco.startACO()
         }
         
         

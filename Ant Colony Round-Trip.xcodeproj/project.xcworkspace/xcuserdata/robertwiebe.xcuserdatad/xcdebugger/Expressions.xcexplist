@@ -11,10 +11,21 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #1 in AntColonyOptimizer.startACO():ACO.swift">
+      </ContextState>
+      <ContextState
          contextName = "AntColonyOptimizer.startACO():ACO.swift">
          <PersistentStrings>
             <PersistentString
                value = "pheromoneMatrix">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AntColonyOptimizer.terminateACO():ACO.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "(0 ..&lt; numPlaces).filter{!visited[$0]}.map{getEdgeValue(0, $0)}">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

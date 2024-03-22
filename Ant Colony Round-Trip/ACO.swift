@@ -21,6 +21,7 @@ class AntColonyOptimizer: ObservableObject {
     @Published var runningACO: Bool = false
     @Published var iteration: Int = 0
     @Published var curTravelTime: Double = 0.0
+    @Published var pheromoneMax: Double = 1.0
     
     func initializeMatrices(numNodes: Int) {
         pheromoneMatrix = [[Double]](repeating: [Double](repeating: 1, count: numNodes), count: numNodes)
@@ -64,6 +65,7 @@ class AntColonyOptimizer: ObservableObject {
         newPheromoneMatrix[startPlace][currentPlace] = 1
         newPheromoneMatrix[currentPlace][startPlace] = 1
         pheromoneMatrix = newPheromoneMatrix
+        pheromoneMax = 1.0
     }
     
     func startACO() {
@@ -72,7 +74,7 @@ class AntColonyOptimizer: ObservableObject {
         curTravelTime = 0.0
         
         Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
-            if !self.runningACO {
+            if !self.runningACO { // end ACO loop
                 timer.invalidate()
                 self.terminateACO()
                 return
@@ -95,7 +97,7 @@ class AntColonyOptimizer: ObservableObject {
                     let valueSum = unvisitedNodes.reduce(0.0){partialSum, node in partialSum + self.getEdgeValue(currentNode, node)}
                     let randomNumber = Double.random(in: 0...1)
                     var accumulatedValue = 0.0
-                    for node in unvisitedNodes {
+                    for node in unvisitedNodes { // choose next edge according to random value
                         accumulatedValue += self.getEdgeValue(currentNode, node) / valueSum
                         if accumulatedValue >= randomNumber {
                             antPath.append(node)
@@ -125,16 +127,16 @@ class AntColonyOptimizer: ObservableObject {
                 }
             }
             
-            var pheromoneMax: Double = 0.0
             for i in 0 ..< numPlaces {
                 for j in 0 ..< numPlaces {
-                    pheromoneMax = max(pheromoneMax, newPheromones[i][j]) + 0.01
+                    self.updateEdgePheromones(start: i, end: j, fitnessSum: newPheromones[i][j])
                 }
             }
             
+            self.pheromoneMax = 0.0
             for i in 0 ..< numPlaces {
                 for j in 0 ..< numPlaces {
-                    self.updateEdgePheromones(start: i, end: j, fitnessSum: newPheromones[i][j] / pheromoneMax)
+                    self.pheromoneMax = max(self.pheromoneMax, self.pheromoneMatrix[i][j])
                 }
             }
         }
