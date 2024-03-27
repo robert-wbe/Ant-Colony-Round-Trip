@@ -52,6 +52,19 @@ let PresetPlaceGroups: [PlaceGroup] = [
         MKMapItem(name: "Wiesbaden", coordinate: .init(latitude: 50.0782, longitude: 8.2398)),
         MKMapItem(name: "Mönchengladbach", coordinate: .init(latitude: 51.1942, longitude: 6.4315))
     ]),
+    PlaceGroup(name: "Test Germany", places: [
+        MKMapItem(name: "Berlin", coordinate: .init(latitude: 52.52, longitude: 13.405)),
+        MKMapItem(name: "Hamburg", coordinate: .init(latitude: 53.5488, longitude: 9.9872)),
+        MKMapItem(name: "Munich", coordinate: .init(latitude: 48.1351, longitude: 11.582)),
+        MKMapItem(name: "Frankfurt", coordinate: .init(latitude: 50.1109, longitude: 8.6821)),
+        MKMapItem(name: "Stuttgart", coordinate: .init(latitude: 48.7758, longitude: 9.1829)),
+        MKMapItem(name: "Leipzig", coordinate: .init(latitude: 51.3397, longitude: 12.3731)),
+        MKMapItem(name: "Dortmund", coordinate: .init(latitude: 51.5136, longitude: 7.4653)),
+        MKMapItem(name: "Hanover", coordinate: .init(latitude: 52.3759, longitude: 9.732)),
+        MKMapItem(name: "Nurenberg", coordinate: .init(latitude: 49.4521, longitude: 11.0767)),
+        MKMapItem(name: "Duisburg", coordinate: .init(latitude: 51.4344, longitude: 6.7623)),
+        MKMapItem(name: "Bonn", coordinate: .init(latitude: 50.7374, longitude: 7.0982)),
+    ]),
     PlaceGroup(name: "Japan", places: [
         MKMapItem(name: "Tokyo", coordinate: .init(latitude: 35.6764, longitude: 139.65)),
         MKMapItem(name: "Yokohama", coordinate: .init(latitude: 35.4437, longitude: 139.638)),

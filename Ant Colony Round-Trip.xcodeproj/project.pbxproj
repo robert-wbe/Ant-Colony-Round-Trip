@@ -16,6 +16,7 @@
 		10F539AD2B9661A30041B0E4 /* Ant_Colony_Round_TripTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F539AC2B9661A30041B0E4 /* Ant_Colony_Round_TripTests.swift */; };
 		10F539B72B9661A30041B0E4 /* Ant_Colony_Round_TripUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F539B62B9661A30041B0E4 /* Ant_Colony_Round_TripUITests.swift */; };
 		10F539B92B9661A30041B0E4 /* Ant_Colony_Round_TripUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F539B82B9661A30041B0E4 /* Ant_Colony_Round_TripUITestsLaunchTests.swift */; };
+		10F99FF22BB0FD7B00A3C3F0 /* Data Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F99FF12BB0FD7B00A3C3F0 /* Data Manager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		10F539B22B9661A30041B0E4 /* Ant Colony Round-TripUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Ant Colony Round-TripUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		10F539B62B9661A30041B0E4 /* Ant_Colony_Round_TripUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ant_Colony_Round_TripUITests.swift; sourceTree = "<group>"; };
 		10F539B82B9661A30041B0E4 /* Ant_Colony_Round_TripUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ant_Colony_Round_TripUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		10F99FF12BB0FD7B00A3C3F0 /* Data Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data Manager.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				10F539A02B9661A30041B0E4 /* Preview Content */,
 				10E8E4E32BA61AF600C20F09 /* Place Presets.swift */,
 				10E8E4E52BA7663800C20F09 /* ACO.swift */,
+				10F99FF12BB0FD7B00A3C3F0 /* Data Manager.swift */,
 			);
 			path = "Ant Colony Round-Trip";
 			sourceTree = "<group>";
@@ -266,6 +269,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				10F5399D2B9661A20041B0E4 /* ContentView.swift in Sources */,
+				10F99FF22BB0FD7B00A3C3F0 /* Data Manager.swift in Sources */,
 				10E8E4E42BA61AF600C20F09 /* Place Presets.swift in Sources */,
 				10F5399B2B9661A20041B0E4 /* Ant_Colony_Round_TripApp.swift in Sources */,
 				10E8E4E62BA7663800C20F09 /* ACO.swift in Sources */,
