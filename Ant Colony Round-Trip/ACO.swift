@@ -83,9 +83,6 @@ class AntColonyOptimizer: ObservableObject {
                     return
                 }
                 
-                print("Running on main thread: \(Thread.isMainThread)")
-                print("Current thread: \(Thread.current)")
-                
                 let numPlaces = self.pheromoneMatrix.count
                 var visited = [Bool](repeating: false, count: numPlaces)
                 var paths: [[Int]] = []
@@ -103,20 +100,16 @@ class AntColonyOptimizer: ObservableObject {
                         let valueSum = unvisitedNodes.reduce(0.0){partialSum, node in partialSum + self.getEdgeValue(currentNode, node)}
                         let randomNumber = Double.random(in: 0...0.99)
                         var accumulatedValue = 0.0
-                        var addedNode = false
                         for node in unvisitedNodes { // choose next edge according to random value
                             accumulatedValue += self.getEdgeValue(currentNode, node) / valueSum
                             if accumulatedValue >= randomNumber {
                                 antPath.append(node)
                                 currentNode = node
                                 visited[node] = true
-                                addedNode = true
                                 break
                             }
                         }
-                        assert(addedNode, "Operation: Failure")
                     }
-                    assert(antPath.count == numPlaces, "Failure in ant path construction")
                     paths.append(antPath)
                 }
                 

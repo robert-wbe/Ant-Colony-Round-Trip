@@ -13,9 +13,13 @@ class DataManager: ObservableObject {
     static let maxCalls = 50
     static let waitTime: UInt64 = 60
     var callsDone: Int = 0
+    @Published var pendingCalls = 0
     var resumeTime: Date? = nil
     @Published var routeCounter: Int = 0
     @Published var waitingForAPI: Bool = false
+    var displayWaiting: Bool {
+        waitingForAPI && pendingCalls == 0
+    }
     
     func fetchRoutes(places: [MKMapItem]) async throws -> [[MKRoute?]] {
         let numPlaces: Int = places.count
@@ -54,9 +58,13 @@ class DataManager: ObservableObject {
         let directions = MKDirections(request: request)
         
         self.callsDone += 1
+        DispatchQueue.main.async {
+            self.pendingCalls += 1
+        }
         let response = try? await directions.calculate()
         
         DispatchQueue.main.async {
+            self.pendingCalls -= 1
             self.routeCounter += 1
         }
         

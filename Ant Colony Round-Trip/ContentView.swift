@@ -19,6 +19,7 @@ struct ContentView: View {
     @State var settingsSheetPresenetd: Bool = false
     
     @State var fetchingRoutes: Bool = false
+    @State var modifiedPlaces: Bool = false
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -43,6 +44,7 @@ struct ContentView: View {
                                 }
                                 .onTapGesture {
                                     places.remove(at: idx)
+                                    self.modifiedPlaces = true
                                     if (places.isEmpty) {
                                         editigPlaces = false
                                     }
@@ -120,6 +122,7 @@ struct ContentView: View {
                             Button(group.name) {
                                 self.routeMatrix = []
                                 self.places = group.places
+                                self.modifiedPlaces = true
                             }
                         }
                     }
@@ -135,7 +138,7 @@ struct ContentView: View {
                     if aco.runningACO {
                         aco.runningACO = false
                     } else {
-                        constructRouteMatrix()
+                        startACO()
                     }
                 }) { aco.runningACO ? Label("Stop ACO", systemImage: "xmark") : Label("Run ACO", systemImage: "ant") }
                 .buttonStyle(.plain)
@@ -181,7 +184,7 @@ struct ContentView: View {
                 }, currentValueLabel: {
                     let percentage = (Double(routesFetched) / Double(routesCount)).formatted(.percent.precision(.fractionLength(0...2)))
                     VStack {
-                        if dataManager.waitingForAPI {
+                        if dataManager.waitingForAPI && dataManager.pendingCalls == 0 {
                             VStack {
                                 Label("API limit reached", systemImage: "exclamationmark.triangle.fill")
                                     .symbolRenderingMode(.multicolor)
@@ -202,6 +205,7 @@ struct ContentView: View {
     
     /// Get the best match for user-inputted search string from the MapKit API, add it to `places`.
     func addPlace() {
+        self.modifiedPlaces = true
         Task {
             let placeResult = try await dataManager.fetchPlace(searchKeyword: searchPlace)
             if let place = placeResult {
@@ -212,13 +216,17 @@ struct ContentView: View {
     }
     
     /// Fetch routes between all pairs of places asynchronously and in parallel. Add them to the `routeMatxix`.
-    func constructRouteMatrix() {
+    func startACO() {
         let numPlaces = places.count
         
         Task {
-            self.fetchingRoutes = true
+            
             aco.initializeMatrices(numNodes: numPlaces)
-            self.routeMatrix = try await dataManager.fetchRoutes(places: self.places)
+            if modifiedPlaces {
+                self.fetchingRoutes = true
+                self.routeMatrix = try await dataManager.fetchRoutes(places: self.places)
+                self.fetchingRoutes = false
+            }
             
             // Setting the heuristic values based on the calculated routes' expected travel times
             for i in 0 ..< numPlaces {
@@ -229,7 +237,7 @@ struct ContentView: View {
                 }
             }
             
-            self.fetchingRoutes = false
+            self.modifiedPlaces = false
             aco.startACO()
         }
         
