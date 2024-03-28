@@ -17,6 +17,9 @@ class DataManager: ObservableObject {
     var resumeTime: Date? = nil
     @Published var routeCounter: Int = 0
     @Published var waitingForAPI: Bool = false
+    var displayWaiting: Bool {
+        waitingForAPI && pendingCalls == 0
+    }
     
     func fetchRoutes(places: [MKMapItem]) async throws -> [[MKRoute?]] {
         let numPlaces: Int = places.count
