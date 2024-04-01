@@ -14,10 +14,10 @@
          contextName = "closure #1 in AntColonyOptimizer.startACO():ACO.swift">
       </ContextState>
       <ContextState
-         contextName = "AntColonyOptimizer.startACO():ACO.swift">
+         contextName = "LocationManager.init():Data Manager.swift">
          <PersistentStrings>
             <PersistentString
-               value = "pheromoneMatrix">
+               value = "self.statusString">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -28,6 +28,25 @@
                value = "(0 ..&lt; numPlaces).filter{!visited[$0]}.map{getEdgeValue(0, $0)}">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AntColonyOptimizer.startACO():ACO.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "pheromoneMatrix">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in ContentView.addPlace():ContentView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.mapCameraPosition.region">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #2 in ContentView.body.getter:ContentView.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

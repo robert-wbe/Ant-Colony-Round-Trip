@@ -68,11 +68,12 @@ class DataManager: ObservableObject {
         return response?.routes.first
     }
     
-    func fetchPlace(searchKeyword: String) async throws -> MKMapItem? {
+    func fetchPlace(searchKeyword: String, at region: MKCoordinateRegion) async throws -> MKMapItem? {
         try await self.getDownloadPermission()
         
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = searchKeyword
+        request.region = region
         
         self.callsDone += 1
         let results = try? await MKLocalSearch(request: request).start()

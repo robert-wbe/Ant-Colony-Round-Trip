@@ -12,6 +12,7 @@ struct ContentView: View {
     @State var routeMatrix: [[MKRoute?]] = []
     @StateObject var aco = AntColonyOptimizer()
     @StateObject var dataManager = DataManager()
+    @State var visibleRegion: MKCoordinateRegion = .init(center: .init(latitude: 38.88, longitude: 99.33), latitudinalMeters: 1_000_000, longitudinalMeters: 1_000_000)
     
     @State var places: [MKMapItem] = []
     @State var searchPlace: String = ""
@@ -59,6 +60,9 @@ struct ContentView: View {
                 if fetchingRoutes {
                     progressView
                 }
+            }
+            .onMapCameraChange { context in
+                self.visibleRegion = context.region
             }
             
             toolbar
@@ -207,7 +211,7 @@ struct ContentView: View {
     func addPlace() {
         self.modifiedPlaces = true
         Task {
-            let placeResult = try await dataManager.fetchPlace(searchKeyword: searchPlace)
+            let placeResult = try await dataManager.fetchPlace(searchKeyword: searchPlace, at: visibleRegion)
             if let place = placeResult {
                 places.append(place)
                 searchPlace = ""
