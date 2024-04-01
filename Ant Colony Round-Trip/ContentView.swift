@@ -8,11 +8,11 @@
 import SwiftUI
 import MapKit
 
-
-
 struct ContentView: View {
     @State var routeMatrix: [[MKRoute?]] = []
     @StateObject var aco = AntColonyOptimizer()
+    @StateObject var dataManager = DataManager()
+    @State var visibleRegion: MKCoordinateRegion = .init(center: .init(latitude: 38.88, longitude: 99.33), latitudinalMeters: 1_000_000, longitudinalMeters: 1_000_000)
     
     @State var places: [MKMapItem] = []
     @State var searchPlace: String = ""
@@ -20,7 +20,7 @@ struct ContentView: View {
     @State var settingsSheetPresenetd: Bool = false
     
     @State var fetchingRoutes: Bool = false
-    @State var routesCalculated: Int = 0
+    @State var modifiedPlaces: Bool = false
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -28,7 +28,7 @@ struct ContentView: View {
                 ForEach(Array(routeMatrix.enumerated()), id: \.offset) { i, row in
                     ForEach(Array(row.enumerated()), id: \.offset) { j, route in
                         if let route = route {
-                            let pheromone = aco.pheromoneMatrix[i][j]
+                            let pheromone = aco.pheromoneMatrix[i][j] / aco.pheromoneMax
                             MapPolyline(route)
                                 .stroke(.orange.opacity(pheromone), lineWidth: 5)
                         }
@@ -45,6 +45,7 @@ struct ContentView: View {
                                 }
                                 .onTapGesture {
                                     places.remove(at: idx)
+                                    self.modifiedPlaces = true
                                     if (places.isEmpty) {
                                         editigPlaces = false
                                     }
@@ -59,6 +60,9 @@ struct ContentView: View {
                 if fetchingRoutes {
                     progressView
                 }
+            }
+            .onMapCameraChange { context in
+                self.visibleRegion = context.region
             }
             
             toolbar
@@ -93,36 +97,56 @@ struct ContentView: View {
             .frame(width: 250)
                 
             Spacer()
-            Button(action: {
-                editigPlaces.toggle()
-                if editigPlaces {
-                    routeMatrix.removeAll()
+            HStack {
+                Button(action: {
+                    editigPlaces.toggle()
+                    if editigPlaces {
+                        routeMatrix.removeAll()
+                    }
+                }) {
+                    Label("Edit cities", systemImage: "checklist")
+                        
                 }
-            }) {
-                Label("Edit cities", systemImage: "checklist")
-                    .padding(6)
-                    .background(.indigo, in: RoundedRectangle(cornerRadius: 7.5))
-            }.buttonStyle(.plain)
-                .disabled(places.isEmpty)
+                .buttonStyle(.plain)
+                .disabled(places.isEmpty || aco.runningACO)
                 .overlay {
                     if editigPlaces {
                         Button("Delete All") {
                             places.removeAll()
                             editigPlaces = false
-                        }.offset(y: 30)
-                            .buttonStyle(.borderedProminent)
+                        }
+                        .offset(y: 30)
+                        .buttonStyle(.borderedProminent)
                     }
                 }
+                Divider().frame(height: 15)
+                Menu(content: {
+                    Section("Presets") {
+                        ForEach(PresetPlaceGroups) {group in
+                            Button(group.name) {
+                                self.routeMatrix = []
+                                self.places = group.places
+                                self.modifiedPlaces = true
+                            }
+                        }
+                    }
+                }, label: {
+                    Image(systemName: "list.star")
+                }).menuStyle(.borderlessButton)
+                    .frame(width: 32)
+            }
+            .padding(6)
+            .background(.indigo, in: RoundedRectangle(cornerRadius: 7.5))
             HStack {
                 Button(action: {
                     if aco.runningACO {
                         aco.runningACO = false
                     } else {
-                        constructRouteMatrix()
+                        startACO()
                     }
                 }) { aco.runningACO ? Label("Stop ACO", systemImage: "xmark") : Label("Run ACO", systemImage: "ant") }
                 .buttonStyle(.plain)
-                .disabled(editigPlaces || places.count <= 1)
+                .disabled(editigPlaces || places.count <= 2)
                 Divider().frame(height: 15)
                 Button(action: {
                     settingsSheetPresenetd = true
@@ -156,15 +180,25 @@ struct ContentView: View {
     
     var progressView: some View {
         let routesCount = places.count * (places.count-1) / 2
-        return ProgressView(value: Double(routesCalculated), total: Double(routesCount),
+        let routesFetched = dataManager.routeCounter
+        return ProgressView(value: Double(routesFetched), total: Double(routesCount),
                 label: {
                     Text("Calculating routes...")
                         .padding(.bottom, 4)
                 }, currentValueLabel: {
-                    let percentage = (Double(routesCalculated) / Double(routesCount)).formatted(.percent.precision(.fractionLength(0...2)))
+                    let percentage = (Double(routesFetched) / Double(routesCount)).formatted(.percent.precision(.fractionLength(0...2)))
                     VStack {
+                        if dataManager.waitingForAPI && dataManager.pendingCalls == 0 {
+                            VStack {
+                                Label("API limit reached", systemImage: "exclamationmark.triangle.fill")
+                                    .symbolRenderingMode(.multicolor)
+                                Text("Waiting 60 seconds\nto continue...")
+                                    .multilineTextAlignment(.center)
+                                    .italic()
+                            }
+                        }
                         Text("\(percentage)").fontWeight(.semibold)
-                        Text("\(routesCalculated)/\(routesCount)")
+                        Text("\(routesFetched)/\(routesCount)")
                     }.padding(.top, 4)
                 }
         )
@@ -175,54 +209,40 @@ struct ContentView: View {
     
     /// Get the best match for user-inputted search string from the MapKit API, add it to `places`.
     func addPlace() {
-        let request = MKLocalSearch.Request()
-        request.naturalLanguageQuery = searchPlace
+        self.modifiedPlaces = true
         Task {
-            let results = try? await MKLocalSearch(request: request).start()
-            let bestResult = results?.mapItems[0]
-            if let bestResult = bestResult{
-                places.append(bestResult)
+            let placeResult = try await dataManager.fetchPlace(searchKeyword: searchPlace, at: visibleRegion)
+            if let place = placeResult {
+                places.append(place)
+                searchPlace = ""
             }
         }
-        searchPlace = ""
     }
     
     /// Fetch routes between all pairs of places asynchronously and in parallel. Add them to the `routeMatxix`.
-    func constructRouteMatrix() {
+    func startACO() {
         let numPlaces = places.count
         
         Task {
-            try await withThrowingTaskGroup(of: (Int, Int, MKRoute?).self) { group in
-                for source in 0 ..< numPlaces {
-                    for destination in source+1 ..< numPlaces {
-                        group.addTask {
-                            let request = MKDirections.Request()
-                            request.source = await places[source]
-                            request.destination = await places[destination]
-                            let directions = MKDirections(request: request)
-                            let response = try? await directions.calculate()
-                            return (source, destination, response?.routes.first)
-                        }
-                    }
-                }
-                routeMatrix = [[MKRoute?]](repeating: [MKRoute?](repeating: nil, count: numPlaces), count: numPlaces)
-                aco.initializeMatrices(numNodes: numPlaces)
-                
-                routesCalculated = 0
-                fetchingRoutes = true
-                for try await (src, dst, route) in group {
-                    if let route = route {
-                        routeMatrix[src][dst] = route
-                        routeMatrix[dst][src] = route
-                        aco.heuristicMatrix[src][dst] = AntColonyOptimizer.divisionFactor / route.expectedTravelTime
-                        aco.heuristicMatrix[dst][src] = AntColonyOptimizer.divisionFactor / route.expectedTravelTime
-                    }
-                    routesCalculated += 1
-                }
-                fetchingRoutes = false
-                aco.startACO()
+            
+            aco.initializeMatrices(numNodes: numPlaces)
+            if modifiedPlaces {
+                self.fetchingRoutes = true
+                self.routeMatrix = try await dataManager.fetchRoutes(places: self.places)
+                self.fetchingRoutes = false
             }
             
+            // Setting the heuristic values based on the calculated routes' expected travel times
+            for i in 0 ..< numPlaces {
+                for j in 0 ..< numPlaces {
+                    if let route = routeMatrix[i][j] {
+                        aco.heuristicMatrix[i][j] = AntColonyOptimizer.divisionFactor / route.expectedTravelTime
+                    }
+                }
+            }
+            
+            self.modifiedPlaces = false
+            aco.startACO()
         }
         
         

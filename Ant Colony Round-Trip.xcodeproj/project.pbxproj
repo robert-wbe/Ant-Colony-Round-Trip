@@ -16,6 +16,7 @@
 		10F539AD2B9661A30041B0E4 /* Ant_Colony_Round_TripTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F539AC2B9661A30041B0E4 /* Ant_Colony_Round_TripTests.swift */; };
 		10F539B72B9661A30041B0E4 /* Ant_Colony_Round_TripUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F539B62B9661A30041B0E4 /* Ant_Colony_Round_TripUITests.swift */; };
 		10F539B92B9661A30041B0E4 /* Ant_Colony_Round_TripUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F539B82B9661A30041B0E4 /* Ant_Colony_Round_TripUITestsLaunchTests.swift */; };
+		10F99FF22BB0FD7B00A3C3F0 /* Data Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F99FF12BB0FD7B00A3C3F0 /* Data Manager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		10F539B22B9661A30041B0E4 /* Ant Colony Round-TripUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Ant Colony Round-TripUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		10F539B62B9661A30041B0E4 /* Ant_Colony_Round_TripUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ant_Colony_Round_TripUITests.swift; sourceTree = "<group>"; };
 		10F539B82B9661A30041B0E4 /* Ant_Colony_Round_TripUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ant_Colony_Round_TripUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		10F99FF12BB0FD7B00A3C3F0 /* Data Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data Manager.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				10F539A02B9661A30041B0E4 /* Preview Content */,
 				10E8E4E32BA61AF600C20F09 /* Place Presets.swift */,
 				10E8E4E52BA7663800C20F09 /* ACO.swift */,
+				10F99FF12BB0FD7B00A3C3F0 /* Data Manager.swift */,
 			);
 			path = "Ant Colony Round-Trip";
 			sourceTree = "<group>";
@@ -199,7 +202,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1520;
-				LastUpgradeCheck = 1520;
+				LastUpgradeCheck = 1530;
 				TargetAttributes = {
 					10F539962B9661A20041B0E4 = {
 						CreatedOnToolsVersion = 15.2;
@@ -266,6 +269,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				10F5399D2B9661A20041B0E4 /* ContentView.swift in Sources */,
+				10F99FF22BB0FD7B00A3C3F0 /* Data Manager.swift in Sources */,
 				10E8E4E42BA61AF600C20F09 /* Place Presets.swift in Sources */,
 				10F5399B2B9661A20041B0E4 /* Ant_Colony_Round_TripApp.swift in Sources */,
 				10E8E4E62BA7663800C20F09 /* ACO.swift in Sources */,
@@ -339,6 +343,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -402,6 +407,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -433,12 +439,16 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Ant Colony Round-Trip/Preview Content\"";
-				DEVELOPMENT_TEAM = 59M93Q2ZK8;
+				DEVELOPMENT_TEAM = 6232MX4759;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "required for app";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "required for app";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "required for app";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -462,12 +472,16 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Ant Colony Round-Trip/Preview Content\"";
-				DEVELOPMENT_TEAM = 59M93Q2ZK8;
+				DEVELOPMENT_TEAM = 6232MX4759;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "required for app";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "required for app";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "required for app";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -488,6 +502,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 6232MX4759;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
@@ -507,6 +522,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 6232MX4759;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
@@ -525,6 +541,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 6232MX4759;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -542,6 +559,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 6232MX4759;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
